@@ -62,3 +62,37 @@ ROLLBACK TO SAVEPOINT second_savepoint;
 UPDATE animals SET weight_kg = weight_kg * -1
 WHERE weight_kg < 0;
 COMMIT;
+
+-- ADD DATA TO OWNER AND SPECIES TABLES - DAY 3
+
+DELETE FROM owners;
+
+INSERT INTO owners (full_name, age)
+VALUES ('Sam Smith', 34),
+  ('Jennifer Orwell', 19),
+  ('Bob', 45),
+  ('Melody Pond', 77),
+  ('Dean Winchester', 14),
+  ('Jodie Whittaker', 38);
+
+DELETE FROM species;
+
+INSERT INTO species (name)
+VALUES ('Pokemon'), ('Digimon');
+
+UPDATE animals SET species_id = 2
+WHERE name like '%mon';
+
+UPDATE animals SET species_id = 1
+WHERE species_id IS NULL;
+
+UPDATE animals SET owner_id = 1 where name = 'Agumon';
+
+UPDATE animals SET owner_id = 2 where name IN ('Gabumon', 'Pikachu');
+
+update animals SET owner_id = 3
+where name in ('Devimon', 'Plantmon');
+
+update animals SET owner_id = 4 where name in ('Charmander', 'Squirtle', 'Blossom');
+
+update animals SET owner_id = 5 where name in ('Angemon', 'Boarmon');
