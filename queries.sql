@@ -65,3 +65,79 @@ SELECT full_name, COUNT(name) FROM owners o
 LEFT JOIN animals a
   ON a.owner_id = o.id
 GROUP BY full_name;
+
+-- QUESTIONS RELATED TO VISITS AND VETS - DAY 4
+
+SELECT v.name as vet, a.name as animal, vis.date_of_visit FROM visits vis
+INNER JOIN animals a
+  ON a.id = vis.animals_id
+INNER JOIN vets v
+  ON v.id = vis.vets_id
+WHERE vis.date_of_visit = (select max(date_of_visit) FROM visits WHERE vets_id=1) 
+ORDER BY vis.date_of_visit desc;
+
+SELECT count(a.name) FROM visits vis
+INNER JOIN animals a
+  ON a.id = vis.animals_id
+INNER JOIN vets v
+  ON v.id = vis.vets_id
+WHERE v.name = 'Stephanie Mendez';
+
+SELECT v.name, s.name FROM specializations sp
+INNER JOIN species s
+  ON s.id = sp.species_id
+RIGHT JOIN vets v
+  ON v.id = sp.vets_id;
+
+SELECT v.name, a.name, vis.date_of_visit FROM visits vis
+INNER JOIN animals a
+  ON a.id = vis.animals_id
+INNER JOIN vets v
+  ON v.id = vis.vets_id
+WHERE v.name = 'Stephanie Mendez' and date_of_visit BETWEEN 'April 1, 2020' and 'August 30, 2020';
+
+SELECT a.name, count(a.name) FROM visits vis
+INNER JOIN animals a
+  ON a.id = vis.animals_id
+INNER JOIN vets v
+  ON v.id = vis.vets_id
+GROUP BY a.name
+order by count desc
+limit 1;
+
+SELECT v.name, a.name, date_of_visit FROM visits vis
+INNER JOIN animals a
+  ON a.id = vis.animals_id
+INNER JOIN vets v
+  ON v.id = vis.vets_id
+WHERE date_of_visit = (select min(date_of_visit) FROM visits WHERE vets_id = 2)
+order by date_of_visit;
+
+SELECT a.name, v.name, date_of_visit  FROM visits vis
+INNER JOIN animals a
+  ON a.id = vis.animals_id
+INNER JOIN vets v
+  ON v.id = vis.vets_id
+WHERE date_of_visit = (select max(date_of_visit) FROM visits);
+
+
+SELECT v.name, count(a.name) FROM visits vis
+INNER JOIN animals a
+  ON a.id = vis.animals_id
+INNER JOIN vets v
+  ON v.id = vis.vets_id
+WHERE v.id not in (select vets_id FROM specializations)
+GROUP BY v.name;
+
+
+SELECT v.name, s.name, count(a.species_id) FROM visits vis
+INNER JOIN animals a
+  ON a.id = vis.animals_id
+INNER JOIN vets v
+  ON v.id = vis.vets_id
+INNER JOIN species s
+  ON s.id = a.species_id
+WHERE v.name = 'Maisy Smith'
+GROUP BY (v.name, s.name)
+order by count desc
+limit 1;
